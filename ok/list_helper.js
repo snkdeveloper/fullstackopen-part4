@@ -121,7 +121,7 @@ const mostLikes = (blogs) =>{
 
 
 }
-console.log(mostLikes(blogs))
+
 const dummy = (blogs) => {
   // ...
   return 1

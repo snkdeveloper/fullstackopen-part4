@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/677e9322ede99c57ff5e3017
+Content-Type: application/json
+
+{
+    "title": "hi3",
+  "author": "nnk2",
+  "url": "www.h2i.com",
+  "likes": 200
+    
+}

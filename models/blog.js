@@ -1,8 +1,8 @@
-const env = require('dotenv').config()
+const config = require('D:\\Projects\\fullstack\\fullstackopen-part4\\ok\\config')
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
-const url = process.env.MONGODB_URI
+const url = config.MONGODB_URI
 
 mongoose.connect(url)
 
