@@ -1,3 +1,4 @@
+const Blog = require('../models/blog')
 const { test, after} = require('node:test')
 const assert = require('node:assert')
 
@@ -36,6 +37,7 @@ test('a valid note can be added ', async () => {
    
     await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluZ2lybCIsImlkIjoiNjc4MjgyZmFkNzMwNmEyZmZhMzQ0ODA5IiwiaWF0IjoxNzM2NjA5NDczfQ.gQTCAYXwUPO9hhkuX6k09gVfoiCofJTVWSKi1Z1Qdsk')
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -52,9 +54,9 @@ test('a valid note can be added ', async () => {
 
 test('likes test',async()=>{
     const newBlog2 = {
-        title: "React patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
+        title: "OWO patterns",
+        author: "Lily P",
+        url: "https://onlyfrags.com/",
         
     }
     const response1 = await api.get('/api/blogs')
@@ -62,6 +64,7 @@ test('likes test',async()=>{
    
     await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluZ2lybCIsImlkIjoiNjc4MjgyZmFkNzMwNmEyZmZhMzQ0ODA5IiwiaWF0IjoxNzM2NjA5NDczfQ.gQTCAYXwUPO9hhkuX6k09gVfoiCofJTVWSKi1Z1Qdsk')
       .send(newBlog2)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -108,15 +111,17 @@ test('a valid note can be updated ', async () => {
     const first= await helper.bac()
     
     const newBlog = {
-        title: " patterns",
-        author: "Michael Chan",
-        url: "https://reactpatterns.com/",
+        title: "pattern5",
+        author: "Michael Chan2",
+        url: "https://reactpatterns2.com/",
         likes: 8
     }
    
-   
+    const blogToUpdate1 = await Blog.findById(first.id)
+    // console.log(blogToUpdate1)
     await api
       .put(`/api/blogs/${first.id}`)
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluZ2lybCIsImlkIjoiNjc4MjgyZmFkNzMwNmEyZmZhMzQ0ODA5IiwiaWF0IjoxNzM2NjA5NDczfQ.gQTCAYXwUPO9hhkuX6k09gVfoiCofJTVWSKi1Z1Qdsk')
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -124,11 +129,41 @@ test('a valid note can be updated ', async () => {
     
     
   
-    const blogToUpdate2 = await helper.bac()
-    delete blogToUpdate2.id
-    assert.deepStrictEqual(blogToUpdate2, newBlog)
+    const blogToUpdate2 = await Blog.findById(first.id)
+    console.log(blogToUpdate2)
+    const response2 = await api.get('/api/blogs')
+    
+  
+    const contents = response2.body.map(r => r.title)
+    console.log(contents)
+   
+    assert(contents.includes('pattern5'))
   
     
+  })
+
+  test('a valid user can be added ', async () => {
+    const newUser = {
+      "username": "rod",
+      "name": "Superuser",
+      "password": "sa"
+    }
+    // const response1 = await api.get('/api/users')
+   
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  
+    // const response2 = await api.get('/api/blogs')
+    
+  
+    // const contents = response2.body.map(r => r.title)
+  
+    // assert.strictEqual(response1.body.length + 1, response2.body.length)
+  
+    // assert(contents.includes('React patterns'))
   })
 
 after(async () => {

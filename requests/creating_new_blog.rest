@@ -1,10 +1,13 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluZ2lybCIsImlkIjoiNjc4MjgyZmFkNzMwNmEyZmZhMzQ0ODA5IiwiaWF0IjoxNzM2NjA5NDczfQ.gQTCAYXwUPO9hhkuX6k09gVfoiCofJTVWSKi1Z1Qdsk
 
 {
-    "title": "hi2",
-  "author": "nnk2",
-  "url": "www.h2i.com",
-  "likes": 200
+    "title": "OWO",
+  "author": "admingirl",
+  "url": "www.hhh.com",
+  "likes": 3000
+ 
+  
     
 }

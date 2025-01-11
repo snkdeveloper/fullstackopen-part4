@@ -1,12 +1,14 @@
-
+const jwt = require('jsonwebtoken')
 const express = require('express')
 const blogsRouter = require('express').Router()
 blogsRouter.use(express.json())
+
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 
 blogsRouter.get('/', async(request, response) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
     response.json(blogs)
     
   })
@@ -23,24 +25,58 @@ blogsRouter.get('/', async(request, response) => {
   })
 
   blogsRouter.post('/', async(request, response) => {
-    // console.log(request.body)
+    
+    // const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    // if (!decodedToken.id) {
+    //   return response.status(401).json({ error: 'token invalid' })
+    // }
+    const user2 = request.user
+    
     const like = request.body.likes ===undefined?0:request.body.likes
     const blog = new Blog({
         title:request.body.title,
         author:request.body.author,
         url:request.body.url,
-        likes:like
+        likes:like,
+
+        user:user2
     })
 
     const result = await blog.save()
-    response.status(201).json(result)
+    // if(user==null){
+
+    //   response.status(201).json(result)
+    // }else{
+      
+      user2.blogs = user2.blogs.concat(result._id)
+      await user2.save()
+      
+      response.status(201).json(result)
+
+   // }
+
+  
+
+    
+    
   
   
   })
 
 
   blogsRouter.delete('/:id', async(request, response,next) => {
-    await Blog.findByIdAndDelete(request.params.id)
+    // const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    const user2 = request.user
+    const blog =  await Blog.findById((request.params.id))
+    if(blog.user.toString()===user2._id.toString()){
+      await Blog.findByIdAndDelete(request.params.id)
+
+    }else{
+      return response.status(401).json({
+        error: 'you cannot delete other people blogs!'
+      })
+    }
+   
     response.status(204).end()
      
      
